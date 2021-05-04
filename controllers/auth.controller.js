@@ -1,9 +1,9 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-import User from "../models/user.models.js";
+const User = require("../models/user.models.js");
 
-export const signIn = async (req, res) => {
+const signIn = async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -24,7 +24,7 @@ export const signIn = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    return res.status(200).json({ result: existingUser, token });
+    return res.status(200).json({ existingUser, token });
   } catch (e) {
     return res
       .status(500)
@@ -32,7 +32,7 @@ export const signIn = async (req, res) => {
   }
 };
 
-export const signUp = async (req, res) => {
+const signUp = async (req, res) => {
   const { username, email, password, confirmPassword } = req.body;
 
   try {
@@ -48,6 +48,7 @@ export const signUp = async (req, res) => {
       email,
       password: hashedPassword,
     });
+    console.log(result);
     const token = jwt.sign({ email: result.email, id: result._id }, "test", {
       expiresIn: "1h",
     });
@@ -57,4 +58,9 @@ export const signUp = async (req, res) => {
       .status(500)
       .json({ message: "Something went wrong, try again." });
   }
+};
+
+module.exports = {
+  signIn,
+  signUp,
 };

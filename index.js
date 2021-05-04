@@ -1,10 +1,12 @@
-import express from "express";
-import mongoose from "mongoose";
-import cors from "cors";
-import morgan from "morgan";
-import dotenv from "dotenv";
-import { PORT, DB_URI } from "./config.js";
-import authRoutes from "./routes/auth.routes.js";
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const morgan = require("morgan");
+const dotenv = require("dotenv");
+const { PORT, DB_URI } = require("./config.js");
+
+const authRoutes = require("./routes/auth.routes");
+const bookRoutes = require("./routes/books.routes");
 
 const app = express();
 dotenv.config();
@@ -14,6 +16,7 @@ app.use(cors());
 app.use(morgan("tiny"));
 
 app.use("/auth", authRoutes);
+app.use("/books", bookRoutes);
 
 app.get("/", (req, res) => res.send("welcome to books api!"));
 
